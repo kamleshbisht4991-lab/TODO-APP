@@ -32,8 +32,8 @@ const getTodos = asyncHandler(async (req, res) => {
  * @access Public   
  */
 const createTodo = asyncHandler(async (req, res) => {
-    const { title, discription } = req.body;
-    const todo = await Todo.create({ title, discription });
+    const { title, description } = req.body;
+    const todo = await Todo.create({ title, description });
     res.status(201).json(todo);
 });
 
@@ -56,7 +56,7 @@ const updateTodo = asyncHandler(async (req, res) => {
 
 
 
-
+  if (req.body.title !== undefined) update.title = req.body.title;
     if (req.body.description !== undefined) update.description = req.body.description;
     if (req.body.done !== undefined) update.done = req.body.done;
     const todo = await Todo.findByIdAndUpdate(req.params.id, update, { new: true });
@@ -69,6 +69,7 @@ const updateTodo = asyncHandler(async (req, res) => {
 }
 
 )
+
 
 /**
  * @desc Delete a todo
@@ -83,7 +84,7 @@ const deleteTodo = asyncHandler(async (req, res) => {
     }
 
     const todo = await Todo.findByIdAndDelete(req.params.id);
-    if (!todo()) {
+    if (!todo) {
         const error = new Error("Todo not found");
         error.status = 404;
         throw error;
